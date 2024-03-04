@@ -1,0 +1,24 @@
+{% extends "template.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-4">
+    <main class="form-signin w-100 m-auto">
+      <form role="form" method="post" action="">
+        <div class="form-floating">
+          <label for="password">Encrypted Text</label>
+          <input type="password" id="password" name="password" placeholder="Add text" class="form-control mb-2">
+          <button id = "rightButton" class="btn btn-sm btn-primary" type="submit">Decrypt</button>
+        </div>
+          
+        <div class="form-floating">
+          <label for="password" style="margin-top: 12px">Decrypted Text</label>
+          <input type="password" id="password" name="password" placeholder="Add text" class="form-control mb-4" disabled>
+        </div>
+      </form>
+    </main>
+</div>
+
+
+{% endblock %}

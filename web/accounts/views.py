@@ -3,6 +3,7 @@ from flask_login import login_user, current_user, login_required, logout_user
 from web import db
 from web.accounts.models import User
 from .forms import LoginForm, RegisterForm
+from crypto.Cipher import Cipher 
 
 accounts_bp = Blueprint("accounts", __name__)
 
@@ -48,3 +49,12 @@ def logout():
     return redirect(url_for("accounts.login"))
 
 
+@accounts_bp.route("/encrypt", methods=["GET", "POST"])
+def encrypt():
+    return render_template("accounts/encrypt.html")
+
+
+
+@accounts_bp.route("/decrypt", methods=["GET", "POST"])
+def decrypt():
+    return render_template("accounts/decrypt.html")
