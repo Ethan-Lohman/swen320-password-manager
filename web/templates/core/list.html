@@ -1,0 +1,41 @@
+{% extends "template.html" %}
+{% block content %}
+<style>
+    table, th, td {
+      border:1px solid black;
+    }
+</style>
+<table id="passwordTable" style="width:50%">
+    <tr>
+      <th>Key</th>
+      <th>Encrypted Password</th>
+    </tr>
+</table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("Listbutton").addEventListener("click", function () {
+            fetch('/Maketable')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById("passwordTable").querySelector("tbody");
+                    tableBody.innerHTML = "";
+                    data.forEach(item => {
+                        const row = document.createElement("tr");
+                        const keyCell = document.createElement("td");
+                        keyCell.textContent = item.key;
+                        row.appendChild(keyCell);
+                        const encryptedPasswordCell = document.createElement("td");
+                        encryptedPasswordCell.textContent = item.encrypted_password;
+                        row.appendChild(encryptedPasswordCell);
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        });
+    });
+</script>
+
+{% endblock %}
