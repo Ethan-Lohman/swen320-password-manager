@@ -7,6 +7,7 @@ from crypto.Cipher import Cipher
 
 accounts_bp = Blueprint("accounts", __name__)
 
+
 @accounts_bp.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
@@ -47,14 +48,3 @@ def logout():
     logout_user()
     flash("You were logged out.", "success")
     return redirect(url_for("accounts.login"))
-
-
-@accounts_bp.route("/encrypt", methods=["GET", "POST"])
-def encrypt():
-    return render_template("accounts/encrypt.html")
-
-
-
-@accounts_bp.route("/decrypt", methods=["GET", "POST"])
-def decrypt():
-    return render_template("accounts/decrypt.html")
