@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, request
-from flask_login import login_required
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required
 from web.accounts.models import User
+from web.accounts.forms import LoginForm, RegisterForm
 
 core_bp = Blueprint("core", __name__)
 
@@ -10,10 +11,15 @@ core_bp = Blueprint("core", __name__)
 @login_required
 def encrypt():
     if request.method == "POST":
-        password_text = request.form['passwordTextE']
-        key_text = request.form['key']
-        encrypted_text = User.encrypt_password(password_text, key_text)
-        return render_template("core/encrypt.html", encrypted_text=encrypted_text)
+        password_text = request.form.get('passwordTextE')
+        key_text = request.form.get('key')
+        user = User.query.filter_by(email=current_user.email).first()
+        if user: 
+            encrypted_text = user.encrypt_password(password_text, key_text)
+            return render_template("core/encrypt.html", encrypted_text=encrypted_text)
+        else: 
+            flash("User not found or not logged in.", "error")
+            return redirect(url_for("auth.login"))
     return render_template("core/encrypt.html")
 
 
@@ -21,10 +27,16 @@ def encrypt():
 @login_required
 def decrypt():
     if request.method == "POST":
-        encrypt_text = request.form['encryptedTextD']
-        decrypted_text = User.decrypt_password(encrypt_text)
-        return render_template("core/decrypt.html", decrypted_text=decrypted_text)
+        encrypt_text = request.form.get('encryptedTextD') 
+        user = User.query.filter_by(email=current_user.email).first()
+        if user:
+            decrypted_text = user.decrypt_password(encrypt_text)
+            return render_template("core/decrypt.html", decrypted_text=decrypted_text)
+        else:
+            flash("User not found or not logged in.", "error")
+            return redirect(url_for("auth.login"))
     return render_template("core/decrypt.html")
+
 
 
 # Starts the Flask app
