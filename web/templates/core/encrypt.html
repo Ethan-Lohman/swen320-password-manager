@@ -5,15 +5,15 @@
 <div class="row">
   <div class="col-md-4">
     <main class="form-signin w-100 m-auto">
-      <form role="form" method="post" action="">
+      <form id ="form1" method="post" action="/encrypt">
         <div class="form-floating">
-          <label for="password">Password Text</label>
-          <input type="password" id="password" name="password" placeholder="Add text" class="form-control mb-2">
+          <label for="passwordTextE">Password Text</label>
+          <input type="password" id="passwordTextE" name="passwordTextE" placeholder="Add text" class="form-control mb-2">
           <button id = "rightButton" class="btn btn-sm btn-primary" type="submit">Encrypt</button>
         </div>
         <div class="form-floating">
           <label for="password" style="margin-top: 12px">Encrypted Text</label>
-          <input type="password" id="password" name="password" placeholder="Add text" class="form-control mb-4" disabled>
+          <input type="text" id="encryptedText" name="encryptedText" placeholder="" value="{{ encrypted_text }}" class="form-control mb-4" disabled>
         </div>
       </form>
     </main>
@@ -21,7 +21,7 @@
     <main class="form-signin w-100 m-auto">
       <form role="form" method="post" action="">
         <div class="form-floating" style="display: flex; align-items: center;">
-          <input type="key" id="key" name="key" placeholder="Key or Tag" class="form-control mb-1 mr-4" style="width: 150px;">
+          <input type="text" id="key" name="key" placeholder="Key or Tag" class="form-control mb-1 mr-4" style="width: 150px;">
           <button class="btn btn-sm btn-primary" type="submit">Save</button>
         </div>
       </form>

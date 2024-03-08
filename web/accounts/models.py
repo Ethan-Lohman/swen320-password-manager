@@ -11,6 +11,9 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     token = db.Column(db.String, nullable=False)
+    encryptedPass = db.Column(db.String)
+    key = db.Column(db.String)
+    
 
     def __init__(self, email, password, token):
         self.email = email
@@ -26,3 +29,16 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         cipher = Cipher();
         return cipher.decrypt(self.password) == password
+    
+    def encrypt_password(self, password, key):
+        cipher = Cipher()
+        encrypted = cipher.encrypt(password, key)
+        self.encrypedPass = encrypted
+        self.key = key
+        return encrypted
+
+    def decrypt_password(self, password):
+        cipher = Cipher()
+        decrypted = cipher.decrypt(password)
+        return decrypted
+        

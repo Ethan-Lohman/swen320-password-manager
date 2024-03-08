@@ -25,5 +25,7 @@ class RegisterForm(FlaskForm):
             return False
         return True
     
+class passwordForm(FlaskForm):
+    password = PasswordField("Password text", validators=[DataRequired()])
 
 

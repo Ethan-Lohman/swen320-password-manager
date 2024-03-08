@@ -5,16 +5,16 @@
 <div class="row">
   <div class="col-md-4">
     <main class="form-signin w-100 m-auto">
-      <form role="form" method="post" action="">
+      <form role="form2" method="post" action="/decrypt">
         <div class="form-floating">
-          <label for="password">Encrypted Text</label>
-          <input type="password" id="password" name="password" placeholder="Add text" class="form-control mb-2">
+          <label for="encryptedTextD">Encrypted Text</label>
+          <input type="password" id="encryptedTextD" name="encryptedTextD" placeholder="Add text" class="form-control mb-2">
           <button id = "rightButton" class="btn btn-sm btn-primary" type="submit">Decrypt</button>
         </div>
           
         <div class="form-floating">
           <label for="password" style="margin-top: 12px">Decrypted Text</label>
-          <input type="password" id="password" name="password" placeholder="Add text" class="form-control mb-4" disabled>
+          <input type="text" id="decryptedText" name="password" class="form-control mb-4" value="{{ decrypted_text }}" disabled>
         </div>
       </form>
     </main>

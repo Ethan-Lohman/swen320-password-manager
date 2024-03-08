@@ -3,8 +3,10 @@ from flask_login import login_user, current_user, login_required, logout_user
 from web import db
 from web.accounts.models import User
 from .forms import LoginForm, RegisterForm
+from crypto.Cipher import Cipher 
 
 accounts_bp = Blueprint("accounts", __name__)
+
 
 @accounts_bp.route("/register", methods=["GET", "POST"])
 def register():
@@ -46,5 +48,3 @@ def logout():
     logout_user()
     flash("You were logged out.", "success")
     return redirect(url_for("accounts.login"))
-
-
