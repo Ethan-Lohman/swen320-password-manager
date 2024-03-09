@@ -11,10 +11,10 @@
         <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
 
         <div class="form-floating">
-          {{ form.email(placeholder="email", class="form-control mb-2") }}
-          {{ form.email.label }}
-            {% if form.email.errors %}
-              {% for error in form.email.errors %}
+          {{ form.username.label }}
+          {{ form.username(placeholder="username", class="form-control mb-2") }}
+            {% if form.username.errors %}
+              {% for error in form.username.errors %}
               <div class="alert alert-danger" role="alert">
                 {{ error }}
               </div>
@@ -22,8 +22,8 @@
             {% endif %}
         </div>
         <div class="form-floating">
-          {{ form.password(placeholder="password", class="form-control mb-2") }}
           {{ form.password.label }}
+          {{ form.password(placeholder="password", class="form-control mb-2") }}
             {% if form.password.errors %}
               {% for error in form.password.errors %}
                 <div class="alert alert-danger" role="alert">
@@ -32,10 +32,9 @@
               {% endfor %}
             {% endif %}
         </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+        <button class="w-100 btn btn-lg btn-primary mb-2" type="submit">Login</button>
         <div></div>
-        <a class="w-100 btn btn-lg btn-primary" href="{{ url_for('accounts.register') }}">Register</a>
-        <!-- <p class="text-center mt-3">New User? <a href="{{ url_for('accounts.register') }}">Register now</a></p> -->
+        <a class="w-100 btn btn-lg btn-primary mb-2" href="{{ url_for('accounts.register') }}">Register</a>
       </form>
     </main>
   </div>

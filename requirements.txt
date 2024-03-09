@@ -12,3 +12,5 @@ Flask-Login
 Flask_wtf
 python-dotenv
 email_validator
+Flask-Testing
+coverage

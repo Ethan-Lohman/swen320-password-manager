@@ -7,16 +7,17 @@
   <link rel="stylesheet" href="/css/bootstrap.min.css" />
 
   <script src="/js/jquery-3.6.3.min.js"></script>
+</head>
 <body>
 
 <div class="container">
-<div id="message_area">
+  <div id="message_area">
     {% if message is defined %}
-        {{message}}
+      {{ message }}
     {% endif %}
+  </div>
+  <a href="/">Go Home</a>
 </div>
-<a href="/">Go Home</a>
 
-</div>
 </body>
 </html>

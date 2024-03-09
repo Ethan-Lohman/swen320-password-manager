@@ -1,0 +1,29 @@
+{% extends "template.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-4">
+    <main class="form-signin w-100 m-auto">
+      <form method="post" action="{{ url_for('accounts.updatepass') }}">
+        {{ form.csrf_token }}
+
+        <div class="form-floating">
+          <label for="confirmPassword">New Password</label>
+          {{ form.confirm_password(placeholder="New Password", class="form-control mb-2", id="confirmPassword") }}
+          {% if form.confirm_password.errors %}
+            {% for error in form.confirm_password.errors %}
+              <div class="alert alert-danger" role="alert">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <button class="w-100 btn btn-lg btn-primary mb-2 btn-sm" type="submit">Change</button>
+      </form>
+    </main>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,4 +1,4 @@
-.PHONY: install run
+.PHONY: install run test
 .PHONY: migrate
 
 install:
@@ -10,3 +10,10 @@ run:
 migrate:
 	python -m flask db migrate && \
 	python -m flask db upgrade
+
+test:
+	python manage.py test
+
+coverage:
+	coverage run -m unittest discover -v && \
+	coverage report -m

@@ -11,7 +11,7 @@ def encrypt():
     if request.method == "POST":
         password_text = request.form.get('passwordTextE')
         key_text = request.form.get('key')
-        user = User.query.filter_by(email=current_user.email).first()
+        user = User.query.filter_by(username=current_user.username).first()
         if user: 
             encrypted_text = user.encrypt_password(password_text, key_text)
             return render_template("core/encrypt.html", encrypted_text=encrypted_text)
@@ -20,13 +20,12 @@ def encrypt():
             return redirect(url_for("auth.login"))
     return render_template("core/encrypt.html")
 
-
 @core_bp.route("/decrypt", methods=["GET", "POST"])
 @login_required
 def decrypt():
     if request.method == "POST":
         encrypt_text = request.form.get('encryptedTextD') 
-        user = User.query.filter_by(email=current_user.email).first()
+        user = User.query.filter_by(username=current_user.username).first()
         if user:
             decrypted_text = user.decrypt_password(encrypt_text)
             return render_template("core/decrypt.html", decrypted_text=decrypted_text)
@@ -35,14 +34,12 @@ def decrypt():
             return redirect(url_for("auth.login"))
     return render_template("core/decrypt.html")
 
-
-
-# Starts the Flask app
 @core_bp.route("/")
 @login_required
 def home():
     return render_template("core/encrypt.html")
-    
+
 @core_bp.route("/list")
+@login_required
 def list():
     return render_template("core/list.html")

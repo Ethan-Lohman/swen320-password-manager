@@ -1,4 +1,3 @@
-# Where the accounts are being stored in.
 from flask_login import UserMixin
 from web import db
 from crypto.Cipher import Cipher
@@ -8,32 +7,36 @@ class User(UserMixin, db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String, unique=True, nullable=False)
+    username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     token = db.Column(db.String, nullable=False)
-    encryptedPass = db.Column(db.String)
-    key = db.Column(db.String)
+    encryptedPass = db.Column(db.String, nullable=False)
+    key = db.Column(db.String, nullable=False)
     
 
-    def __init__(self, email, password, token):
-        self.email = email
+    def __init__(self, username, password, token):
+        self.username = username 
         cipher = Cipher()
-        encText = cipher.encrypt(password)
-        self.password = encText
+        enc_text = cipher.encrypt(password)
+        key = cipher.encrypt(password)
+        self.password = enc_text
         self.token = token
+        self.encryptedPass = enc_text
+        self.key = key
 
 
     def __repr__(self):
-        return f"<email {self.email}>"
-    
+        return f"<username {self.username}>" 
+
     def check_password(self, password):
-        cipher = Cipher();
-        return cipher.decrypt(self.password) == password
+        cipher = Cipher()
+        return cipher.decrypt(self.encryptedPass) == password
+
     
     def encrypt_password(self, password, key):
         cipher = Cipher()
         encrypted = cipher.encrypt(password, key)
-        self.encrypedPass = encrypted
+        self.encryptedPass = encrypted
         self.key = key
         return encrypted
 
@@ -41,4 +44,3 @@ class User(UserMixin, db.Model):
         cipher = Cipher()
         decrypted = cipher.decrypt(password)
         return decrypted
-        

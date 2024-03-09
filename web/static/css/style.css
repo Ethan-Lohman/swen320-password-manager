@@ -48,6 +48,10 @@ a {
   text-decoration: none;
 }
 
+.bg-custom-gray {
+  background-color: #cacaca; /* Replace with your desired gray color code */
+}
+
 /* #message_area {
 	position: relative;
   border-style: solid;

@@ -1,9 +1,10 @@
 from flask import Flask, jsonify
-app = Flask(__name__)
 from web import db
 
-@app.route('Maketable')
-def Maketable():
+app = Flask(__name__)
+
+@app.route('/Maketable')
+def maketable():
     password_list = db.get_password_list()
     return jsonify(password_list)
 
