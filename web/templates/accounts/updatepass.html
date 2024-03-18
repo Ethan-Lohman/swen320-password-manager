@@ -9,9 +9,9 @@
         {{ form.csrf_token }}
 
         <div class="form-floating">
-          <label for="confirmPassword">New Password</label>
-          {{ form.confirm_password(placeholder="New Password", class="form-control mb-2", id="confirmPassword") }}
-          {% if form.confirm_password.errors %}
+          <label form="newPassword">New Password</label>
+          {{ form.newPassword(placeholder="New Password", class="form-control mb-2", id="newPassword") }}
+          {% if form.newPassword.errors %}
             {% for error in form.confirm_password.errors %}
               <div class="alert alert-danger" role="alert">
                 {{ error }}

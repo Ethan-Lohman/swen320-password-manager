@@ -29,9 +29,6 @@ class passwordForm(FlaskForm):
     password = PasswordField("Password text", validators=[DataRequired()])
 
 class ChangePasswordForm(FlaskForm):
-    confirm_password = PasswordField(
-        'Confirm Password',
-        validators=[DataRequired()]
-    )
+    newPassword = PasswordField("New Password", validators=[DataRequired(), Length(min=8, max=20)])
 
 

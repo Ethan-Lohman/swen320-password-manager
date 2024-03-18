@@ -22,3 +22,8 @@ This project is a password manager for the class of Introduction to Software Tes
 - **manage.py**
 - **Dockerfile**
 - **README.md**
+
+## Credit
+Tutorial used to get started: [link](https://www.freecodecamp.org/news/how-to-setup-user-authentication-in-flask/)
+
+Team - Ethan Lohman, Rainey Biggerstaff, Brady Wire

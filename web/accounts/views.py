@@ -43,12 +43,21 @@ def login():
 @accounts_bp.route("/logout")
 @login_required
 def logout():
+    db.session.commit()
     logout_user()
     flash("You were logged out.", "success")
     return redirect(url_for("accounts.login"))
 
-@accounts_bp.route("/updatepass")
+@accounts_bp.route("/updatepass", methods=["GET", "POST"])
 @login_required
 def updatepass():
     form = ChangePasswordForm()
+    if form.validate_on_submit():
+        user = User.query.get(current_user.id)
+        if user:
+            user.set_password(form.newPassword.data)  # Update the password
+            db.session.commit()
+            flash("Password updated successfully!", "success")
+        else:
+            flash("User not found.", "danger")
     return render_template("accounts/updatepass.html", form=form)

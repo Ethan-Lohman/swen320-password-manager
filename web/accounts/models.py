@@ -12,7 +12,7 @@ class User(UserMixin, db.Model):
     token = db.Column(db.String, nullable=False)
     encryptedPass = db.Column(db.String, nullable=False)
     key = db.Column(db.String, nullable=False)
-    
+    # encryPassWithKey = db.Column(db.String, nullable=False)
 
     def __init__(self, username, password, token):
         self.username = username 
@@ -23,7 +23,7 @@ class User(UserMixin, db.Model):
         self.token = token
         self.encryptedPass = enc_text
         self.key = key
-
+        # self.encryPassWithKey = ''
 
     def __repr__(self):
         return f"<username {self.username}>" 
@@ -32,6 +32,13 @@ class User(UserMixin, db.Model):
         cipher = Cipher()
         return cipher.decrypt(self.encryptedPass) == password
 
+    def set_password(self, new_password):
+        cipher = Cipher()
+        encrypted_password = cipher.encrypt(new_password)
+        self.encryptedPass = encrypted_password
+        self.password = encrypted_password
+        db.session.commit()
+        return self.password
     
     def encrypt_password(self, password, key):
         cipher = Cipher()
