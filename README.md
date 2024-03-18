@@ -4,7 +4,7 @@ This project is a password manager for the class of Introduction to Software Tes
 
 ## Getting started
 
-1. `make install`
+1. `make setup`
 2. `make run`
 
 ### Folder structure
