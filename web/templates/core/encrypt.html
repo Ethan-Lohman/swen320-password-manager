@@ -5,27 +5,36 @@
 <div class="row">
   <div class="col-md-4">
     <main class="form-signin w-100 m-auto">
-      <form id="form1" method="post" action="/encrypt">
+      <form id="form1" method="post" action="/encrypt" onsubmit="updateEncryptedText()">
         <div class="form-floating">
           <label for="passwordTextE">Password Text</label>
           <input type="password" id="passwordTextE" name="passwordTextE" placeholder="Add text" class="form-control mb-2">
           <button id="rightButton" class="btn btn-sm btn-primary" type="submit">Encrypt</button>
         </div>
-        <div class="form-floating">
-          <label for="password" style="margin-top: 12px">Encrypted Text</label>
-          <input type="text" id="encryptedText" name="encryptedText" placeholder="" value="{{ encrypted_text }}" class="form-control mb-4" disabled>
-        </div>
       </form>
     </main>
-    <main class="form-signin w-100 m-auto">
-      <form role="form" method="post" action="">
-        <div class="form-floating" style="display: flex; align-items: center;">
-          <input type="text" id="key" name="key" placeholder="Key or Tag" class="form-control mb-1 mr-4" style="width: 150px;">
-          <button class="btn btn-sm btn-primary" type="submit">Save</button>
-        </div>
-      </form>
-    </main>
+    <form role="form" method="post" action="{{ url_for('core.save_password') }}">
+      {{ form.csrf_token }}
+      <div class="form-floating">
+        <label for="password" style="margin-top: 12px">Encrypted Text</label>
+        <input type="text" id="encryptedText" name="encryptedText" placeholder="" value="{{ encrypted_text }}" class="form-control mb-4" disabled>
+        <input type="hidden" id="encrypted_text" name="encrypted_text" value="{{ encrypted_text }}">
+      </div>
+      <div class="form-floating" style="display: flex; align-items: center;">
+          {{ form.key(placeholder="Key or Tag", class="form-control mb-1 mr-4", style="width: 150px;") }}
+          {% for error in form.key.errors %}
+          <span style="color: red;">{{ error }}</span>
+          {% endfor %}
+          <input type="hidden" id="form_encrypted_text" name="encrypted_text" value="{{ form.encrypted_text.data }}">
+          {% for error in form.encrypted_text.errors %}
+          <span style="color: red;">{{ error }}</span>
+          {% endfor %}
+          <button type="submit" class="btn btn-sm btn-primary">Save</button>
+      </div>
+    </form>
   </div>
 </div>
 <div class="Encryption-page"></div>
+
 {% endblock %}
+

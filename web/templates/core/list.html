@@ -1,41 +1,26 @@
 {% extends "template.html" %}
 {% block content %}
-<style>
-    table, th, td {
-      border:1px solid black;
-    }
-</style>
-<table id="passwordTable" style="width:50%">
-    <tr>
-      <th>Key</th>
-      <th>Encrypted Password</th>
-    </tr>
+<p style="padding-left: 10px;"><strong>Encrypted Passwords</strong></p>
+<table class="table table-borderless">
+    <thead>
+        <tr>
+            <th style="width: 20%;"></th>
+            <th style="width: 70%;"></th>
+            <th style="width: 10%;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for password in encrypted_passwords %}
+        <tr style="border-bottom: none;">
+            <td>{{ password.key }}</td>
+            <td>{{ password.encrypted_text }}</td>
+            <td>
+                <form action="{{ url_for('core.remove_password', password_id=password.id) }}" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("Listbutton").addEventListener("click", function () {
-            fetch('/Maketable')
-                .then(response => response.json())
-                .then(data => {
-                    const tableBody = document.getElementById("passwordTable").querySelector("tbody");
-                    tableBody.innerHTML = "";
-                    data.forEach(item => {
-                        const row = document.createElement("tr");
-                        const keyCell = document.createElement("td");
-                        keyCell.textContent = item.key;
-                        row.appendChild(keyCell);
-                        const encryptedPasswordCell = document.createElement("td");
-                        encryptedPasswordCell.textContent = item.encrypted_password;
-                        row.appendChild(encryptedPasswordCell);
-                        tableBody.appendChild(row);
-                    });
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
-        });
-    });
-</script>
-
 {% endblock %}

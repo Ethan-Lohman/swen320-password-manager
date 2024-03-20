@@ -12,7 +12,7 @@ class User(UserMixin, db.Model):
     token = db.Column(db.String, nullable=False)
     encryptedPass = db.Column(db.String, nullable=False)
     key = db.Column(db.String, nullable=False)
-    # encryPassWithKey = db.Column(db.String, nullable=False)
+    encryPassWithKey = db.Column(db.String, nullable=False)
 
     def __init__(self, username, password, token):
         self.username = username 
@@ -23,7 +23,7 @@ class User(UserMixin, db.Model):
         self.token = token
         self.encryptedPass = enc_text
         self.key = key
-        # self.encryPassWithKey = ''
+        self.encryPassWithKey = ''
 
     def __repr__(self):
         return f"<username {self.username}>" 
@@ -51,3 +51,15 @@ class User(UserMixin, db.Model):
         cipher = Cipher()
         decrypted = cipher.decrypt(password)
         return decrypted
+
+class EncryptedPassword(db.Model):
+    __tablename__ = "encrypted_passwords"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    key = db.Column(db.String, nullable=False)
+    encrypted_text = db.Column(db.String, nullable=False)
+
+    user = db.relationship("User", backref=db.backref("encrypted_passwords", lazy="dynamic"))
+
+    def __repr__(self):
+        return f"<EncryptedPassword {self.id}: {self.encrypted_text}>"
