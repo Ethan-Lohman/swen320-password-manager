@@ -1,41 +1,7 @@
-import os
 import unittest
-
-from flask_testing import TestCase
+from base_test import BaseTestCase
 from flask import url_for
-
-from web import app, db
-from web.accounts.models import User
 from web.accounts.forms import LoginForm, RegisterForm, ChangePasswordForm
-
-class BaseTestCase(TestCase):
-    def create_app(self):
-        app.config.from_object("config.TestingConfig")
-        return app
-
-    def setUp(self):
-        db.create_all()
-        user = User(username="testUser", password="password", token="verygoodtokentohave")
-        db.session.add(user)
-        db.session.commit()
-
-    def tearDown(self):
-        db.session.remove()
-        db.drop_all()
-        testdb_path = os.path.join("web", "testdb.sqlite")
-        if os.path.exists(testdb_path):
-            os.remove(testdb_path)
-
-class TestRoutes(BaseTestCase):
-    def testDecryptionRoute(self):
-        self.client.post("/login", data=dict(username="testUser", password="password")) # Logins.
-        response = self.client.get("/decrypt") # Sees if it can get the decrypt page.
-        self.assertIn(b'Decryption-page', response.data) # Asserts whether the page it is on is the decryption page.
-
-    def testEncryptionRoute(self):
-        self.client.post("/login", data=dict(username="testUser", password="password")) # Logins.
-        response = self.client.get("/encrypt") # Sees if it can get the decrypt page.
-        self.assertIn(b'Encryption-page', response.data) # Asserts whether the page it is on is the encryption page.
 
 class TestRegisterForm(BaseTestCase):
     # Boundary Value Test for Username (Amount of characters) {4, 5, 6, 7, 9, 10, 11}

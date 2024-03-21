@@ -6,7 +6,7 @@ install:
 
 setup:
 	pip install -r requirements.txt && \
-	source .env && \
+	. ./.env && \
 	python -m flask db migrate && \
 	python -m flask db upgrade
 

@@ -1,0 +1,9 @@
+import unittest
+from base_test import BaseTestCase
+from flask import url_for
+from web.accounts.forms import LoginForm, RegisterForm, ChangePasswordForm
+
+
+
+if __name__ == "__main__":
+    unittest.main()
