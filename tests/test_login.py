@@ -1,67 +1,89 @@
+import os
 import unittest
-from base_test import BaseTestCase
+
+from flask_testing import TestCase
 from flask import url_for
+
+from web import app, db
+from web.accounts.models import User
 from web.accounts.forms import LoginForm, RegisterForm, ChangePasswordForm
 
-class TestRegisterForm(BaseTestCase):
-    # Boundary Value Test for Username (Amount of characters) {4, 5, 6, 7, 9, 10, 11}
-    def testInvalidUsername(self):
-        form1 = RegisterForm(username="boba", password="password", token="verygoodtokentohave")
-        form2 = RegisterForm(username="12345678911", password="password", token="verygoodtokentohave")
-        self.assertFalse(form1.validate())
-        self.assertFalse(form2.validate())
+class BaseTestCase(TestCase):
+    def create_app(self):
+        app.config.from_object("config.TestingConfig")
+        return app
 
-    def testValidUsername(self):
-        form1 = RegisterForm(username="12345", password="password", token="verygoodtokentohave")
-        form2 = RegisterForm(username="123456", password="password", token="verygoodtokentohave")
-        form3 = RegisterForm(username="1234567", password="password", token="verygoodtokentohave")
-        form4 = RegisterForm(username="123456789", password="password", token="verygoodtokentohave")
-        form5 = RegisterForm(username="1234567891", password="password", token="verygoodtokentohave")
-        self.assertTrue(form1.validate())
-        self.assertTrue(form2.validate())
-        self.assertTrue(form3.validate())
-        self.assertTrue(form4.validate())
-        self.assertTrue(form5.validate())
+    def setUp(self):
+        db.create_all()
+        user = User(username="testUser", password="password", token="verygoodtokentohave")
+        db.session.add(user)
+        db.session.commit()
 
-    # Boundary Value Test for Password (Amount of characters) {7, 8, 9, 15, 19, 20, 21}
-    def testInvalidPassword(self):
-        form1 = RegisterForm(username="validuser", password="1234567", token="verygoodtokentohave") #7
-        form2 = RegisterForm(username="validuser", password="123456789012345678901", token="verygoodtokentohave") #21
-        self.assertFalse(form1.validate())
-        self.assertFalse(form2.validate())
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+        testdb_path = os.path.join("web", "testdb.sqlite")
+        if os.path.exists(testdb_path):
+            os.remove(testdb_path)
 
-    def testValidPassword(self):
-        form1 = RegisterForm(username="validuser", password="12345678", token="verygoodtokentohave") # 8
-        form2 = RegisterForm(username="validuser", password="123456789", token="verygoodtokentohave") # 9
-        form3 = RegisterForm(username="validuser", password="123456789012345", token="verygoodtokentohave") # 15
-        form4 = RegisterForm(username="validuser", password="1234567890123456789", token="verygoodtokentohave") # 19
-        form5 = RegisterForm(username="validuser", password="12345678901234567890", token="verygoodtokentohave") # 20
-        self.assertTrue(form1.validate())
-        self.assertTrue(form2.validate())
-        self.assertTrue(form3.validate())
-        self.assertTrue(form4.validate())
-        self.assertTrue(form5.validate())
+# Test the login form to see if it returns an error and if it logins correctly.
+class TestLogin(BaseTestCase):
+    def test_invalidUsernameLogin(self):
+        # Create an instance of the LoginForm with invalid credentials
+        form1 = LoginForm(username="testUse", password="password")
+        
+        # Call validate() to trigger form validation
+        form1.validate()
 
+        # Send a GET request to the login route to get the form
+        response = self.client.get("/login")
 
-    # Boundary Value Test for Token (Amount of characters) {9, 10, 11, 20, 29, 30, 31}
-    def testInvalidToken(self):
-        form1 = RegisterForm(username="validuser", password="validpassword", token="123456789") # 9
-        form2 = RegisterForm(username="validuser", password="validpassword", token="1234567890123456790123456789012") # 31
-        self.assertFalse(form1.validate())
-        self.assertFalse(form2.validate())
+        # Send a POST request to the login route with the form data
+        response = self.client.post("/login", data=dict(
+            username=form1.username.data,
+            password=form1.password.data
+        ), follow_redirects=True)
 
-    def testValidToken(self):
-        form1 = RegisterForm(username="validuser", password="validpassword", token="1234567891") # 10
-        form2 = RegisterForm(username="validuser", password="validpassword", token="12345678911") # 11
-        form3 = RegisterForm(username="validuser", password="validpassword", token="123456789012345312") # Midpoint somewhere
-        form4 = RegisterForm(username="validuser", password="validpassword", token="12345678901234567890123456789") # 29
-        form5 = RegisterForm(username="validuser", password="validpassword", token="123456789012345678901234567890") # 30
-        self.assertTrue(form1.validate())
-        self.assertTrue(form2.validate())
-        self.assertTrue(form3.validate())
-        self.assertTrue(form4.validate())
-        self.assertTrue(form5.validate())
+        # Assert that the expected flash message appears in the response
+        self.assertIn(b'Invalid username and/or password.', response.data)
 
+    def test_invalidPasswordLogin(self):
+        # Create an instance of the LoginForm with invalid credentials
+        form1 = LoginForm(username="testUser", password="passwor")
+        
+        # Call validate() to trigger form validation
+        form1.validate()
+
+        # Send a GET request to the login route to get the form
+        response = self.client.get("/login")
+
+        # Send a POST request to the login route with the form data
+        response = self.client.post("/login", data=dict(
+            username=form1.username.data,
+            password=form1.password.data
+        ), follow_redirects=True)
+
+        # Assert that the expected flash message appears in the response
+        self.assertIn(b'Invalid username and/or password.', response.data)
+
+    def test_validLogin(self):
+        # Create an instance of the LoginForm with invalid credentials
+        form1 = LoginForm(username="testUser", password="password")
+        
+        # Call validate() to trigger form validation
+        form1.validate()
+
+        # Send a GET request to the login route to get the form
+        response = self.client.get("/login")
+
+        # Send a POST request to the login route with the form data
+        response = self.client.post("/login", data=dict(
+            username=form1.username.data,
+            password=form1.password.data
+        ), follow_redirects=True)
+
+        response = self.client.get("/decrypt") # Sees if it can get the decrypt page.
+        self.assertIn(b'Decryption-page', response.data) # Asserts whether the page it is on is the decryption page.
 
 if __name__ == "__main__":
     unittest.main()

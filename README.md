@@ -5,6 +5,9 @@ This project is a password manager for the class of Introduction to Software Tes
 ## Getting started
 
 1. `make setup`
+- If the make setup does not work do the following:
+  1. source .env
+  2. make migrate
 2. `make run`
 
 ### Folder structure
@@ -22,6 +25,11 @@ This project is a password manager for the class of Introduction to Software Tes
 - **manage.py**
 - **Dockerfile**
 - **README.md**
+
+## Testing
+
+1. Make statement
+2. Make branch
 
 ## Credit
 Tutorial used to get started: [link](https://www.freecodecamp.org/news/how-to-setup-user-authentication-in-flask/)

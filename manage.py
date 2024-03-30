@@ -9,8 +9,8 @@ cli = FlaskGroup(app)
 def test():
     app.config.from_object(config("APP_SETTINGS", default="config.DevelopmentConfig"))
 
-    tests = unittest.TestLoader().discover("tests")
-    result = unittest.TextTestRunner(verbosity=10).run(tests)
+    tests = unittest.TestLoader().discover("tests", pattern="*.py")
+    result = unittest.TextTestRunner(verbosity=100).run(tests)
 
     if result.wasSuccessful():
         return 0

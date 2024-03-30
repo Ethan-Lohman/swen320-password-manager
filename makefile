@@ -20,6 +20,10 @@ migrate:
 test:
 	python manage.py test
 
-coverage:
+statement:
 	coverage run -m unittest discover -v && \
+	coverage report -m
+
+branch:
+	coverage run --branch -m unittest discover -v && \
 	coverage report -m
