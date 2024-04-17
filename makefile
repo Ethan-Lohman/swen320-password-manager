@@ -21,9 +21,9 @@ test:
 	python manage.py test
 
 statement:
-	coverage run -m unittest discover -v && \
-	coverage report -m
+	python -m coverage run -m unittest discover -v && \
+	python -m coverage report -m
 
 branch:
-	coverage run --branch -m unittest discover -v && \
-	coverage report -m
+	python -m coverage run --branch -m unittest discover -v && \
+	python -m coverage report -m
