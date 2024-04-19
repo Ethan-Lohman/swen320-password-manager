@@ -26,5 +26,19 @@ class BaseTestCase(TestCase):
         if os.path.exists(testdb_path):
             os.remove(testdb_path)
 
+class TestDecryption(BaseTestCase):
+    def test_decryption(self):
+        encryptedText = "WCFmZjVnT2pqZSFtTEdFR0ZNWmw0"
+        form1 = LoginForm(username="testUser", password="password")
+        form1.validate()
+        response = self.client.get("/login")
+        response = self.client.post("/login", data=dict(
+            username=form1.username.data,
+            password=form1.password.data
+        ), follow_redirects=True)
+        self.client.get("/decrypt")
+        response2 = self.client.post("/decrypt", data=dict(encryptedTextD=encryptedText), follow_redirects=True)
+        self.assertIn("Hello", response2.data.decode("utf-8"))
+
 if __name__ == "__main__":
     unittest.main()

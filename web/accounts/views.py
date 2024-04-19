@@ -26,6 +26,7 @@ def register():
 
 @accounts_bp.route("/login", methods=["GET", "POST"])
 def login():
+    success = False
     if current_user.is_authenticated:
         flash("You are already logged in.", "info")
         return redirect(url_for("core.home"))
@@ -34,11 +35,12 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):  # Add password check
             login_user(user)
+            success = True
             return redirect(url_for("core.home"))
         else:
             flash("Invalid username and/or password.", "danger")
             return render_template("accounts/login.html", form=form)
-    return render_template("accounts/login.html", form=form)
+    return render_template("accounts/login.html", form=form, success=success)
 
 @accounts_bp.route("/logout")
 @login_required
@@ -52,12 +54,14 @@ def logout():
 @login_required
 def updatepass():
     form = ChangePasswordForm()
+    success = False
     if form.validate_on_submit():
         user = User.query.get(current_user.id)
         if user:
             user.set_password(form.newPassword.data)  # Update the password
             db.session.commit()
             flash("Password updated successfully!", "success")
+            success = True
         else:
             flash("User not found.", "danger")
-    return render_template("accounts/updatepass.html", form=form)
+    return render_template("accounts/updatepass.html", form=form, success=success)

@@ -54,7 +54,6 @@ class TestEncryptedPasswords(BaseTestCase):
         password="password"
         ))
 
-
     def test_RemoveEncryptedPassword(self):
 
         self.client.post("/login", data=dict(
@@ -62,13 +61,10 @@ class TestEncryptedPasswords(BaseTestCase):
             password="password"
         ), follow_redirects=True)
 
-
-
         encrypt_form = EncryptedPasswordForm()
         encrypt_form.key.data = "key1"
         encrypt_form.encrypted_text.data = "text1"
         self.client.post("/save_password", data=encrypt_form.data)
-
 
         encrypted_password = EncryptedPassword.query.filter_by(key="key1").first()
 
@@ -82,7 +78,6 @@ class TestEncryptedPasswords(BaseTestCase):
         username="testUser",
         password="password"
         ))
-
 
 if __name__ == "__main__":
     unittest.main()
